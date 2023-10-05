@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const multer = require("multer");
 const app = express();
 
 const authRoute = require("./routes/auth");
@@ -21,6 +22,21 @@ mongoose.connect(process.env.MONGO_URL + "blogs", {
 }).catch((error) => {
   console.error("Error connecting to MongoDB:", error);
 });
+
+const storage = multer.diskStorage({
+  destination:(req, file, cb)=> {
+    cb(null, "images")//gonna take the file and save it in the images folder 
+  },
+  filename: (req, file, cb)=> {
+    cb(null, req.body.name)//give it a name which we are providing 
+  },
+
+})
+
+const upload = multer({storage: storage})
+app.post("/api/upload", upload.single("file"),(req,res)=> {
+  res.status(200).json("File has been uploaded")
+})
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
