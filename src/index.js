@@ -14,9 +14,9 @@ const cors = require('cors');
 dotenv.config();
 
 app.use(express.json()); // App should be able to send JSON data
-
+app.use(cors());
 app.use(function(req, res, next) {
-  app.use(cors({ origin: 'http://localhost:3000' }));
+
   
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Request-Headers",
