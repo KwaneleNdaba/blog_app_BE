@@ -23,18 +23,26 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-    try{
-        const user = await User.findOne({email : req.body.email})
-       !user && res.status(400).json("Wrong login credentials!")
-       const validated = await bcrypt.compare(req.body.password, user.password);
-       !validated && res.status(400).json("Wrong login credentials")
+    try {
+        const user = await User.findOne({ email: req.body.email });
 
-       const {password, ...others} = user._doc//I am sending all the properties of the user except the password
-       res.status(200).json(others)
-    }catch(error) {
-        res.status(500).json(error);
+        if (!user) {
+            return res.status(400).json("Wrong login credentials!");
+        }
+
+        // Check if req.body.password matches the hashed password from the user object
+        const validated = await bcrypt.compare(req.body.password, user.password);
+
+        if (!validated) {
+            return res.status(400).json("Wrong login credentials");
+        }
+
+        const { password, ...others } = user._doc;
+
+        res.status(200).json(others);
+    } catch (error) {
         res.status(500).json(error.message);
     }
-})
+});
 
 module.exports = router

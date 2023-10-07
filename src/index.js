@@ -17,7 +17,7 @@ app.use(express.json()); // App should be able to send JSON data
 app.use(cors());
 app.use(function(req, res, next) {
 
-  
+  app.use(cors({ origin: 'http://localhost:3000' }));
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Request-Headers",
   "access-control-allow-credentials,access-control-allow-headers,access-control-allow-methods,access-control-allow-origin,authorization,content-type,access-control-allow-origin");
