@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const multer = require("multer");
+const path = require("path");
 const app = express();
 
 const authRoute = require("./routes/auth");
@@ -15,6 +16,7 @@ dotenv.config();
 
 app.use(express.json()); // App should be able to send JSON data
 app.use(cors());
+app.use("./public/uploads",express.static(path.join(__dirname,"public/uploads")));
 app.use(function(req, res, next) {
 
   app.use(cors({ origin: 'http://localhost:3000' }));
