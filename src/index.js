@@ -36,19 +36,24 @@ mongoose.connect(process.env.MONGO_URL + "blogs", {
 });
 
 const storage = multer.diskStorage({
-  destination:(req, file, cb)=> {
-    cb(null, "images")//gonna take the file and save it in the images folder 
+  destination: (req, file, cb) => {
+    cb(null, "public/uploads"); // Use the correct folder path
   },
-  filename: (req, file, cb)=> {
-    cb(null, req.body.name)//give it a name which we are providing 
+  filename: (req, file, cb) => {
+    cb(null, req.body.name); // Use the desired filename
   },
+});
 
-})
+
 
 const upload = multer({storage: storage})
-app.post("/api/upload", upload.single("file"),(req,res)=> {
-  res.status(200).json("File has been uploaded")
-})
+
+
+app.use("/uploads", express.static("public/uploads"));
+
+app.post("/api/upload", upload.single("file"), (req, res) => {
+  res.status(200).json("File has been uploaded");
+});
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
